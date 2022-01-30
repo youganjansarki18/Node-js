@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="inner">
+            <div class="children">
+
+                <div class="text">
+                    <h1 id="quotes">Quotes</h1>
+                    <h2 id="author">Author</h2>
+                </div>
+                
+                <button id="get_quotes">New Quotes</button>
+                <button id="tweet">Tweet</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes= document.getElementById('quotes');
+        const author=document.getElementById('author');
+
+        function random_quotes(realdata){
+             const ran=Math.floor(Math.random()*1600);
+            //  console.log(ran);
+            //  console.log(realdata[ran].text);
+            //  console.log(realdata[ran].author);
+            //  quotes.innerText=realdata[ran].text;
+            //better ones 
+            quotes.innerText=`${realdata[ran].text}`;
+             if(realdata[ran].author ==null){
+                author.innerText="unknown";
+                // console.log('detected');
+             }
+             else
+                author.innerText=`By-${realdata[ran].author}`;
+        };
+    
+        const getQuotes= async()=>{
+            const API='https://type.fit/api/quotes';
+            let data=await fetch(API);
+            try{
+                let realData=await data.json();
+                random_quotes(realData);
+            }catch(error){};
+        };
+        const tweetNow=()=>{
+            const tweetPost=`https://twitter.com/intent/tweet?text=${quotes.innerText}%20By-${author.innerText}`;
+            window.open(tweetPost);
+        }
+        getQuotes();
+        const button= document.getElementById('get_quotes').addEventListener("click",getQuotes);
+        const tweet=document.getElementById('tweet').addEventListener('click',tweetNow);
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
